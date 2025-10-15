@@ -1,22 +1,22 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { UserAuthForm, AuthMode } from "@/components/auth/user-auth-form";
 import { Logo } from "@/components/layout/logo";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginForm() {
   const [mode, setMode] = useState<AuthMode>(AuthMode.SignIn);
 
   const toggleMode = () => {
     setMode(mode === AuthMode.SignIn ? AuthMode.SignUp : AuthMode.SignIn);
   };
-
+  
   return (
-    <div className="container relative flex h-screen flex-col items-center justify-center">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
+     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
         <div className="flex flex-col space-y-2 text-center">
           <div className="flex items-center justify-center">
             <Logo />
@@ -71,6 +71,15 @@ export default function LoginPage() {
           .
         </p>
       </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <div className="container relative flex h-screen flex-col items-center justify-center">
+      <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }
