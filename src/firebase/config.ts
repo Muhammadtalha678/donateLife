@@ -1,8 +1,11 @@
+// This file is safe to commit. It reads configuration from environment variables.
+// The actual keys are stored in the .env.local file, which is not committed.
+
 export const firebaseConfig = {
-  "projectId": "studio-8405285481-a2878",
-  "appId": "1:772725567105:web:a25e7c6b9a339780f92780",
-  "apiKey": "AIzaSyAtpAVJJh0ktGjXS1Jtdru0KAWcpSq4Dcg",
-  "authDomain": "studio-8405285481-a2878.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "772725567105"
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
 };
