@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # Firebase config
-src/firebase/config.ts
+# src/firebase/config.ts
 
 # Dependencies
 /node_modules
