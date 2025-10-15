@@ -1,0 +1,16 @@
+{
+  "placeholderImages": [
+    {
+      "id": "about-section",
+      "description": "An uplifting image of a smiling doctor or nurse looking at the camera, representing trust and care in healthcare.",
+      "imageUrl": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkb2N0b3J8ZW58MHx8fHwxNzU5NTE5MTU5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "doctor smiling"
+    },
+    {
+      "id": "process-section",
+      "description": "An image illustrating a clear and simple process or journey.",
+      "imageUrl": "https://images.unsplash.com/photo-1558346494-022b72467b3d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxqb3VybmV5fGVufDB8fHx8MTc1OTQ1MTgwNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "journey steps"
+    }
+  ]
+}

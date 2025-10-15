@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the Donate Life application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name.",
+          "format": "string"
+        },
+        "lastLogin": {
+          "type": "string",
+          "description": "The timestamp of the user's last login.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email"
+      ]
+    },
+    "Donor": {
+      "title": "Donor",
+      "description": "Represents a blood donor registration.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who registered as a donor."
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "bloodType": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastDonation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "eligibilityAge": {
+          "type": "string"
+        },
+        "eligibilityWeight": {
+            "type": "string"
+        },
+        "eligibilityTattoo": {
+            "type": "string"
+        },
+        "eligibilityHealth": {
+            "type": "string"
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+      },
+      "required": ["userId", "fullName", "email", "phone", "bloodType", "dob", "createdAt", "eligibilityAge", "eligibilityWeight", "eligibilityTattoo", "eligibilityHealth"]
+    },
+    "BloodRequest": {
+        "title": "BloodRequest",
+        "description": "Represents a request for blood.",
+        "type": "object",
+        "properties": {
+            "userId": {
+                "type": "string",
+                "description": "The ID of the user who made the request."
+            },
+            "patientName": {
+                "type": "string"
+            },
+            "hospitalName": {
+                "type": "string"
+            },
+            "requiredBloodType": {
+                "type": "string"
+            },
+            "urgency": {
+                "type": "string"
+            },
+            "contactPerson": {
+                "type": "string"
+            },
+            "contactPhone": {
+                "type": "string"
+            },
+            "additionalInfo": {
+                "type": "string"
+            },
+            "createdAt": {
+                "type": "string",
+                "format": "date-time"
+            }
+        },
+        "required": ["userId", "patientName", "hospitalName", "requiredBloodType", "urgency", "contactPerson", "contactPhone", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "email"
+    ]
+  },
+  "firestore": {
+    "/donors/{donorId}": {
+        "schema": {
+            "$ref": "#/entities/Donor"
+        },
+        "description": "Stores blood donor registrations."
+    },
+    "/requests/{requestId}": {
+        "schema": {
+            "$ref": "#/entities/BloodRequest"
+        },
+        "description": "Stores blood donation requests."
+    }
+  }
+}

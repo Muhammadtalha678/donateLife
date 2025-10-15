@@ -1,0 +1,75 @@
+/**
+ * @file Firestore Security Rules
+ * @description This ruleset enforces a user-ownership model for blood donor registrations and blood requests.
+ * All data is stored in top-level collections: `/donors/{donorId}` and `/requests/{requestId}`.
+ * Key Security Decisions:
+ *  - Users can only create, update, or delete their own donor registrations and blood requests.
+ *  - Listing of all donor registrations and blood requests is publicly allowed.
+ *  - Data schema validation is relaxed to allow rapid iteration during prototyping.  Only authorization-critical fields are validated.
+ *  - De-normalization of `userId` onto the documents is used to make authorization checks efficient and secure.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Manages access to blood donor registration documents.
+     * @path /donors/{donorId}
+     * @allow (create) User with auth UID 'user_abc' can create a donor document if `request.resource.data.userId` == 'user_abc'.
+     * @allow (get, list) All users can read (get, list) donor documents.
+     * @allow (update, delete) User with auth UID 'user_abc' can update/delete a donor document if `resource.data.userId` == 'user_abc'.
+     * @deny (create) User with auth UID 'user_xyz' cannot create a donor document if `request.resource.data.userId` == 'user_abc'.
+     * @deny (update, delete) User with auth UID 'user_xyz' cannot update/delete a donor document if `resource.data.userId` == 'user_abc'.
+     * @principle Allows public read access but enforces ownership for writes.
+     */
+    match /donors/{donorId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isSignedIn() && isExistingOwner(resource.data.userId);
+    }
+
+    /**
+     * @description Manages access to blood request documents.
+     * @path /requests/{requestId}
+     * @allow (create) User with auth UID 'user_abc' can create a request document if `request.resource.data.userId` == 'user_abc'.
+     * @allow (get, list) All users can read (get, list) request documents.
+     * @allow (update, delete) User with auth UID 'user_abc' can update/delete a request document if `resource.data.userId` == 'user_abc'.
+     * @deny (create) User with auth UID 'user_xyz' cannot create a request document if `request.resource.data.userId` == 'user_abc'.
+     * @deny (update, delete) User with auth UID 'user_xyz' cannot update/delete a request document if `resource.data.userId` == 'user_abc'.
+     * @principle Allows public read access but enforces ownership for writes.
+     */
+    match /requests/{requestId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isSignedIn() && isExistingOwner(resource.data.userId);
+    }
+
+    // ---- Helper functions ----
+
+    /**
+     * @description Checks if the user is signed in.
+     * @return True if the user is authenticated, false otherwise.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the user is the owner of the resource.
+     * @param {string} userId The user ID to compare against the authenticated user's ID.
+     * @return True if the user is the owner, false otherwise.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the user is the owner of the resource and the resource exists.
+     * @param {string} userId The user ID to compare against the authenticated user's ID.
+     * @return True if the user is the owner and the resource exists, false otherwise.
+     */
+    function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+    }
+  }
+}
